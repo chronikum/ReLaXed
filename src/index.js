@@ -90,7 +90,8 @@ const puppeteerConfig = {
   args: (!options.sandbox ? ['--no-sandbox'] : []).concat([
     '--disable-translate',
     '--disable-extensions',
-    '--disable-sync'
+    '--disable-sync',
+    '--font-render-hinting=medium',
   ])
 }
 
@@ -123,7 +124,7 @@ var updateConfig = async function () {
 
 
 
-async function main () {
+async function main() {
   console.log(colors.magenta.bold('Launching ReLaXed...'))
 
   // LOAD BUILT-IN "ALWAYS-ON" PLUGINS
@@ -142,7 +143,8 @@ async function main () {
 
   const buildError = await build(inputPath)
 
-  if (program.buildOnce) {
+  if (options.buildOnce) {
+    fs.unlink(tempHTMLPath, () => { }) // delete the temporary file
     process.exit(buildError ? 1 : 0)
   } else {
     watch()
@@ -155,7 +157,7 @@ async function main () {
  * ==============================================================
  */
 
-async function build (filepath) {
+async function build(filepath) {
   var shortFileName = filepath.replace(inputDir, '')
   if ((path.basename(filepath) === 'config.yml') || (filepath.endsWith('.plugin.js'))) {
     await updateConfig()
@@ -205,8 +207,8 @@ async function build (filepath) {
   console.log(colors.magenta.bold(`... Done in ${duration}s`))
   if (generatingPDF && relaxedGlobals.config.after && !generateError) {
     console.log(colors.magenta.bold("Running 'after' command..."))
-    var subprocess = exec(relaxedGlobals.config.after, cwd=relaxedGlobals.basedir)
-    
+    var subprocess = exec(relaxedGlobals.config.after, cwd = relaxedGlobals.basedir)
+
     subprocess.stdout.on('data', (data) => {
       console.log(`after-stdout: ${data}`);
     });
@@ -237,7 +239,7 @@ async function build (filepath) {
  * ==============================================================
  */
 
-function watch () {
+function watch() {
   console.log(colors.magenta(`\nNow idle and waiting for file changes.`))
   chokidar.watch(watchLocations, {
     awaitWriteFinish: {
@@ -247,7 +249,7 @@ function watch () {
   }).on('change', build)
 }
 
-function autodetectMasterFile (input) {
+function autodetectMasterFile(input) {
   var dir = input || '.'
   var files = fs.readdirSync(dir).filter((name) => name.endsWith('.pug'))
   var filename

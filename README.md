@@ -1,8 +1,17 @@
 <p align="center"><img width='270px' src="https://github.com/RelaxedJS/ReLaXed/raw/master/logo-blue.png" /></p>
 
-# ReLaXed
+### Note from chronikum
+> The maintainer of the original [repository](https://github.com/RelaxedJS/ReLaXed) does not seem to be active anymore. During a project I had the need to fix some bugs. 
 
-[![Build Status](https://travis-ci.org/RelaxedJS/ReLaXed.svg?branch=master)](https://travis-ci.org/RelaxedJS/ReLaXed)
+Those are:
+
+- The `--build-once` bug, which caused the program to not exit when using the `--build-once` flag
+- We are now deleting the temporary HTML file after the PDF is generated
+- I added a new to puppeeter parameter which enables smoother font-rendering (`--font-render-hinting=medium`)
+
+Thanks to the original authors for this great project and I hope this fork can help others as well!
+
+# ReLaXed
 
 ReLaXed creates PDF documents interactively using HTML or [Pug](https://pugjs.org/api/getting-started.html) (a shorthand for HTML). It allows complex layouts to be defined with CSS and JavaScript, while writing the content in a friendly, minimal syntax close to Markdown or LaTeX.
 
